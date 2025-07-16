@@ -8,7 +8,10 @@ import "./App.css";
 function App() {
   const horizontalRef = useRef(null);
   const menuRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(() => {
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    return window.innerWidth <= 768 || isTouchDevice;
+  });
   const [showAboutDescription, setShowAboutDescription] = useState(false);
 
   useEffect(() => {
