@@ -14,7 +14,7 @@ const contactItems = [
   {
     title: "resume",
     icon: "/6.png",
-    link: "/resume.pdf",
+    link: "./resume.pdf",
   },
 ];
 
