@@ -31,7 +31,6 @@ const Contact = () => {
             <img className="contact-icon" src={item.icon} alt={`${item.title} icon`} />
             <div className="contact-title-and-description">
               <div className="contact-title">{item.title}</div>
-              <div className="contact-description">{item.description}</div>
             </div>
           </div>
         </div>
