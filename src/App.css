@@ -28,11 +28,13 @@ hhtml, body, #root {
 
 .panel {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh; /* allows vertical expansion */
   flex-shrink: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  overflow: auto; /* not hidden! */
 }
 
 .menu-links {
@@ -86,15 +88,17 @@ hhtml, body, #root {
 /* Projects Section */
 .projects-container {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
   display: flex;
   flex-direction: column;
   gap: 26px;
-  padding: 40px 100px 40px 500px; /* LEFT padding increased */
+  padding: 40px 100px 40px 500px;
   box-sizing: border-box;
-  align-items: flex-start; /* Ensures left-aligned within the padding */
+  align-items: flex-start;
   justify-content: center;
   text-align: left;
+  overflow-y: auto;
 }
 
 .project-slot {
@@ -150,9 +154,8 @@ hhtml, body, #root {
 
 .project-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
-  flex-direction: row;
 }
 
 .project-icon {
@@ -375,37 +378,36 @@ hhtml, body, #root {
 
   /* PROJECTS */
   .projects-container {
-    padding: 40px 24px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 24px;
+    padding: 40px 16px;
+    gap: 20px;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
   }
 
   .project-slot {
     align-items: center;
     text-align: center;
+    width: 100%;
+    max-width: 600px;
   }
 
   .project-header {
     flex-direction: column;
     align-items: center;
+    text-align: center;
   }
 
-  .project-title {
-    font-size: 1rem;
-    text-align: center;
+  .project-title-and-description {
+    align-items: center;
   }
 
   .project-description {
     font-size: 0.9rem;
-    max-width: 85vw;
-    text-align: center;
-    opacity: 1;
-    transform: none;
-  }
-
-  .project-icon {
-    width: 32px;
-    height: 32px;
+    max-width: 90vw;
   }
 
   /* CONTACT */
@@ -455,6 +457,13 @@ hhtml, body, #root {
 
 
 @media (max-width: 480px) {
+
+  .panel {
+    min-height: 100vh;
+    height: auto !important;
+    overflow-y: auto;
+  }
+
   .about-me-content {
     transform: translate(-50%, -50%);
     padding: 1rem;
@@ -482,43 +491,57 @@ hhtml, body, #root {
 
   /* PROJECTS */
   .projects-container {
-    padding: 40px 16px;
-    align-items: center;
+    align-items: center !important;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 16px !important;
     gap: 20px;
+    height: auto !important;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .project-slot {
+    width: 100%;
+    max-width: 90vw;
+    align-items: center;
+    text-align: center;
   }
 
   .project-title {
     font-size: 0.9rem;
-    text-align: center;
   }
 
   .project-description {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    max-width: 90vw;
     text-align: center;
-    opacity: 1;
-    transform: none;
   }
 
   .project-icon {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
   }
 
   /* CONTACT */
   .contact-container {
-    padding: 40px 16px;
-    align-items: center;
-    gap: 30px;
+    height: auto !important;
+    min-height: 100vh;
+    overflow-y: auto;
+    justify-content: center !important;
+    padding: 40px 16px !important;
+    align-items: center !important;
+    text-align: center;
   }
 
   .contact-title {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     text-align: center;
   }
 
   .contact-icon {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
   }
 
   .contact-header {
@@ -578,8 +601,10 @@ hhtml, body, #root {
   }
 
   .project-slot {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    text-align: center;
   }
 
   .project-header {
@@ -587,17 +612,20 @@ hhtml, body, #root {
     align-items: center;
   }
 
-  .project-title {
-    font-size: 1.1rem;
-    text-align: center;
+  .project-title-and-description {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   .project-description {
-    font-size: 1rem;
-    max-width: 85vw;
     text-align: center;
-    opacity: 1;
-    transform: none;
+  }
+
+  .project-title {
+    font-size: 1.1rem;
+    text-align: center;
   }
 
   .project-icon {
@@ -652,5 +680,56 @@ hhtml, body, #root {
 
   .panel {
     overflow: hidden;
+  }
+}
+
+@media (max-width: 768px) {
+  .horizontal-wrapper {
+    display: none;
+  }
+
+  .vertical-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .scroll-track {
+    display: none;
+  }
+
+  .menu-links {
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    flex-direction: column;
+    align-items: flex-end;
+    opacity: 1;
+    transform: translateY(0px);
+    z-index: 10;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .projects-container {
+    padding: 32px 16px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .project-slot {
+    text-align: center;
+    align-items: center;
+  }
+
+  .project-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1rem;
+    gap: 8px;
+  }
+
+  .project-description {
+    text-align: center;
   }
 }

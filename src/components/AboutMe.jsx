@@ -41,7 +41,7 @@ const AboutMe = ({ showDescription }) => {
           if (!isMounted) return;
           output[i] = output[i].slice(0, -1);
           setTypedLines([...output]);
-          await new Promise((r) => setTimeout(r, 10));
+          await new Promise((r) => setTimeout(r, 20));
         }
       }
 

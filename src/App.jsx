@@ -6,87 +6,132 @@ import Contact from "./components/Contact";
 import "./App.css";
 
 function App() {
-  const scrollContainerRef = useRef(null);
   const horizontalRef = useRef(null);
   const menuRef = useRef(null);
-  const [showMenu, setShowMenu] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [showAboutDescription, setShowAboutDescription] = useState(false);
-  const lastWidthRef = useRef(window.innerWidth);
 
   useEffect(() => {
-    window.scrollTo({ top: 0 });
+    const checkIsMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
 
-    const handleScroll = () => {
-      const y = window.scrollY;
-      const panelWidth = window.innerWidth;
-      const nearestIndex = Math.round(y / panelWidth);
+    const handleMobileScroll = () => {
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
 
-      if (horizontalRef.current) {
-        horizontalRef.current.style.transform = `translateX(-${y}px)`;
-      }
-
-      if (menuRef.current) {
-        if (nearestIndex === 0) {
+      if (isMobile && menuRef.current) {
+        if (scrollY < viewportHeight * 0.8) {
           menuRef.current.style.opacity = "1";
-          menuRef.current.style.transform = "translateY(0px)";
+          menuRef.current.style.transform = "translateY(0)";
         } else {
           menuRef.current.style.opacity = "0";
           menuRef.current.style.transform = "translateY(200px)";
         }
       }
+    };
 
-      clearTimeout(window._snapTimeout);
-      window._snapTimeout = setTimeout(() => {
-        const targetY = nearestIndex * panelWidth;
-        const distance = Math.abs(targetY - y);
-        if (distance > 8) {
-          window.scrollTo({ top: targetY, behavior: "smooth" });
+    if (!isMobile) {
+      const handleScroll = () => {
+        const y = window.scrollY;
+        const panelWidth = window.innerWidth;
+        const nearestIndex = Math.min(3, Math.round(y / panelWidth));
+
+        if (horizontalRef.current) {
+          horizontalRef.current.style.transform = `translateX(-${y}px)`;
         }
-      }, 180);
-    };
 
-    const handleResize = () => {
-      const currentWidth = window.innerWidth;
-      const currentIndex = Math.round(window.scrollY / currentWidth);
-      if (currentIndex !== 0 || currentWidth !== lastWidthRef.current) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-      lastWidthRef.current = currentWidth;
-    };
+        if (menuRef.current) {
+          if (nearestIndex === 0) {
+            menuRef.current.style.opacity = "1";
+            menuRef.current.style.transform = "translateY(0px)";
+          } else {
+            menuRef.current.style.opacity = "0";
+            menuRef.current.style.transform = "translateY(200px)";
+          }
+        }
 
-    window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+        clearTimeout(window._snapTimeout);
+        window._snapTimeout = setTimeout(() => {
+          const targetY = nearestIndex * panelWidth;
+          const distance = Math.abs(targetY - y);
+          if (distance > 8) {
+            window.scrollTo({ top: targetY, behavior: "smooth" });
+          }
+        }, 180);
+      };
+
+      const handleResize = () => {
+        window.scrollTo({ top: 0, behavior: "auto" });
+        const scrollTrack = document.querySelector('.scroll-track');
+        if (scrollTrack) scrollTrack.style.height = `${4 * window.innerWidth}px`;
+
+        if (window.innerWidth <= 768) {
+          document.getElementById("panel-0")?.scrollIntoView({ behavior: "auto" });
+        }
+      };
+
+      handleResize();
+      window.addEventListener("scroll", handleScroll);
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+        window.removeEventListener("resize", handleResize);
+      };
+    } else {
+      window.addEventListener("scroll", handleMobileScroll);
+      return () => {
+        window.removeEventListener("resize", checkIsMobile);
+        window.removeEventListener("scroll", handleMobileScroll);
+      };
+    }
+  }, [isMobile]);
 
   const scrollToSection = (index) => {
-    const y = index * window.innerWidth;
-    window.scrollTo({ top: y, behavior: "smooth" });
-    if (index === 0) {
-      setShowAboutDescription((prev) => !prev);
+    if (!isMobile) {
+      const y = index * window.innerWidth;
+      window.scrollTo({ top: y, behavior: "smooth" });
+
+      if (index === 0) {
+        setShowAboutDescription(prev => !prev);
+      } else {
+        setShowAboutDescription(false);
+      }
     } else {
-      setShowAboutDescription(false);
+      const element = document.getElementById(`panel-${index}`);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+
+        if (index === 0) {
+          setShowAboutDescription(prev => !prev);
+        } else {
+          setShowAboutDescription(false);
+        }
+      }
     }
   };
 
   return (
     <>
-      <div className="scroll-track" style={{ height: `${4 * window.innerWidth}px` }}></div>
+      {!isMobile && (
+        <div className="scroll-track" style={{ height: `${4 * window.innerWidth}px` }}></div>
+      )}
 
-      <div className="horizontal-wrapper" ref={horizontalRef}>
-        <section className="panel">
+      <div
+        className={isMobile ? "vertical-wrapper" : "horizontal-wrapper"}
+        ref={horizontalRef}
+      >
+        <section className="panel" id="panel-0">
           <AboutMe showDescription={showAboutDescription} />
         </section>
-        <section className="panel travels-container">
+        <section className="panel travels-container" id="panel-1">
           <Travels />
         </section>
-        <section className="panel">
+        <section className="panel" id="panel-2">
           <Projects />
         </section>
-        <section className="panel">
+        <section className="panel" id="panel-3">
           <Contact />
         </section>
       </div>
