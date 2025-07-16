@@ -3,7 +3,7 @@
   font-weight: 400;
   color-scheme: light dark;
   color: var(--gray);
-  background-color: var(--cream);
+  background-color: #8FBDD3;
   font-family: 'Fira Code', Consolas, Menlo, Monaco, 'Courier New', monospace;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -57,7 +57,6 @@ button:focus-visible {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
   }
   a:hover {
     color: #747bff;
