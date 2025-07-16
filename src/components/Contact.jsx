@@ -14,7 +14,7 @@ const contactItems = [
   {
     title: "resume",
     icon: "/6.png",
-    link: "https://hanarazia.github.io/resume.pdf",
+    link: "/resume.pdf",
   },
 ];
 
