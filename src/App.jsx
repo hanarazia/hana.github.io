@@ -8,14 +8,25 @@ import "./App.css";
 function App() {
   const horizontalRef = useRef(null);
   const menuRef = useRef(null);
+
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   const [isMobile, setIsMobile] = useState(() => {
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    return window.innerWidth <= 768 || isTouchDevice;
+    return window.innerWidth <= 768 || isTouchDevice || isSafari;
   });
+
   const [showAboutDescription, setShowAboutDescription] = useState(false);
 
   useEffect(() => {
-    const checkIsMobile = () => setIsMobile(window.innerWidth <= 768);
+    if (isSafari) {
+      document.body.classList.add("safari");
+    }
+
+    const checkIsMobile = () => {
+      const updatedMobile = window.innerWidth <= 768 || isTouchDevice || isSafari;
+      setIsMobile(updatedMobile);
+    };
+
     checkIsMobile();
     window.addEventListener("resize", checkIsMobile);
 

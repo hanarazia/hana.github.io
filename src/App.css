@@ -7,6 +7,7 @@ hhtml, body, #root {
   overflow-y: auto;
   font-family: 'Fira Code', monospace;
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 .scroll-track {
@@ -184,7 +185,9 @@ hhtml, body, #root {
 
 .contact-container {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 70px;
@@ -572,6 +575,10 @@ hhtml, body, #root {
   }
 }
 
+body.safari .horizontal-wrapper {
+  display: none !important;
+}
+
 @media (max-width: 1024px) and (min-width: 601px) {
   .about-me-content {
     padding: 1rem;
@@ -685,11 +692,11 @@ hhtml, body, #root {
 
 @media (max-width: 768px) {
   .horizontal-wrapper {
-    display: none;
+    display: none !important;
   }
 
   .vertical-wrapper {
-    display: flex;
+    display: flex !important;
     flex-direction: column;
     width: 100%;
   }
@@ -733,3 +740,4 @@ hhtml, body, #root {
     text-align: center;
   }
 }
+
